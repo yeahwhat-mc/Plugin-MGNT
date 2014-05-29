@@ -1,0 +1,5 @@
+#!/bin/bash
+
+PLUGINDIR="/opt/minecraft/.mc-resources/plugins"
+
+ls -al ${PLUGINDIR} | tail -n +4 | awk '{ print $9" "$10" "$11 }'
