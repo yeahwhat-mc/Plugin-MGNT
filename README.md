@@ -1,4 +1,4 @@
-Plugin MGMT
+Plugin MGNT
 ============
 
 Bash script to enable and disable Bukkit plugins including version managment and autocomplete support.
@@ -7,12 +7,12 @@ Bash script to enable and disable Bukkit plugins including version managment and
 
 #### Bash script
 
-    git clone git://github.com/yeahwhat-mc/Plugin-MGMT.git /usr/src/Plugin-MGMT
-    ln -s /usr/src/Plugin-MGMT/plugin-* /usr/local/bin/
+    git clone git://github.com/yeahwhat-mc/Plugin-MGNT.git /usr/src/Plugin-MGNT
+    ln -s /usr/src/Plugin-MGNT/plugin-* /usr/local/bin/
 
 #### Autocompletion
 	
-    ln -s /usr/src/Plugin-MGMT/bash_completion.d/plugin-mgnt /etc/bash_completion.d/plugin-mgnt
+    ln -s /usr/src/Plugin-MGNT/bash_completion.d/plugin-mgnt /etc/bash_completion.d/plugin-mgnt
 
 ## Assumptions
 
