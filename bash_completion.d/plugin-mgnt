@@ -1,0 +1,29 @@
+_plugin-version-bump() 
+{
+    local files
+    cur=${COMP_WORDS[COMP_CWORD]}
+    local files=$(for x in `find /opt/minecraft/.mc-resources/plugins -type f -exec basename {} \;`; do echo ${x}; done)
+    COMPREPLY=( $( compgen -W "${files}" -- ${cur} ) )
+    return 0
+}
+complete -F _plugin-version-bump plugin-version-bump
+
+_plugin-up() 
+{
+    local files
+    cur=${COMP_WORDS[COMP_CWORD]}
+    local files=$(for x in `find /opt/minecraft/.mc-resources/plugins -type l -exec basename {} \;`; do echo ${x}; done)
+    COMPREPLY=( $( compgen -W "${files}" -- ${cur} ) )
+    return 0
+}
+complete -F _plugin-up plugin-up
+
+_plugin-down() 
+{
+    local files
+    cur=${COMP_WORDS[COMP_CWORD]}
+    local files=$(for x in `find /opt/minecraft/mc-main/plugins -type l -exec basename {} \;`; do echo ${x}; done)
+    COMPREPLY=( $( compgen -W "${files}" -- ${cur} ) )
+    return 0
+}
+complete -F _plugin-down plugin-down
