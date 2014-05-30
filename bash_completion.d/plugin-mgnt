@@ -27,3 +27,13 @@ _plugin-down()
     return 0
 }
 complete -F _plugin-down plugin-down
+
+_plugin-list() 
+{
+    local args
+    cur=${COMP_WORDS[COMP_CWORD]}
+    local args=$(for x in "resources" "server"; do echo ${x}; done)
+    COMPREPLY=( $( compgen -W "${args}" -- ${cur} ) )
+    return 0
+}
+complete -F _plugin-list plugin-list
