@@ -24,9 +24,9 @@ Bash script to enable and disable Bukkit plugins including version managment and
 
 ## Usage
 
-##### List plugin resources
+##### List plugins 
 
-`$ plugin-resources`
+`$ plugin-list resources`
 
     ChestShop_3.7.8.jar
     ChestShop_latest.jar -> /opt/minecraft/.mc-resources/plugins/ChestShop_3.7.8.jar
@@ -37,7 +37,18 @@ Bash script to enable and disable Bukkit plugins including version managment and
     Vault_1.4.1.jar
     Vault_latest.jar -> /opt/minecraft/.mc-resources/plugins/Vault_1.4.1.jar
 
-Shows all plugins and symlinks in your resource folder.
+`$ plugin-list server`
+
+    ChestShop_3.7.8.jar
+    ChestShop_latest.jar -> /opt/minecraft/.mc-resources/plugins/ChestShop_3.7.8.jar
+    CraftConomy_3.1.6.jar
+    CraftConomy_latest.jar -> /opt/minecraft/.mc-resources/plugins/CraftConomy_3.1.6.jar
+    DisguiseCraft_1.7.8b55.jar
+    DisguiseCraft_latest.jar -> /opt/minecraft/.mc-resources/plugins/DisguiseCraft_1.7.8b55.jar
+    Vault_1.4.1.jar
+    Vault_latest.jar -> /opt/minecraft/.mc-resources/plugins/Vault_1.4.1.jar
+
+Shows all plugins and symlinks in your resource and server folder.
 
 ##### Bump active plugin version
 
@@ -62,3 +73,4 @@ Unlinks / disables the productive plugin in the Bukkit plugin folder (`/opt/mine
 - [ ] Configuration file
 - [ ] Plugin download 
 - [ ] Screenshot or demo
+- [ ] `plugin-info` to get status of plugin, versions and modification dates
