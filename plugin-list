@@ -6,7 +6,7 @@ PLUGINDIR="/opt/minecraft/mc-main/plugins"
 if [ "$#" -ne 1 ]
 then
 	echo "Error: No argument given!"
-  	echo "Usage: $ plugin-bump \"WorldGuard-4.9b482\""
+  	echo "Usage: $ plugin-list \"resources\""
   	exit 1
 fi
 
