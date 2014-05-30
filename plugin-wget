@@ -1,0 +1,35 @@
+#!/bin/bash
+
+PLUGINDIR="/opt/minecraft/.mc-resources/plugins"
+
+download()
+{
+    local url=$1
+    echo -n "    "
+    wget ${PLUGINDIR} --progress=dot $url 2>&1 | grep --line-buffered "%" | \
+        sed -u -e "s,\.,,g" | awk '{printf("\b\b\b\b%4s", $2)}'
+    echo -ne "\b\b\b\b"
+    echo "100% - Done"
+}
+
+if [ "$#" -ne 1 ]
+then
+    echo "Error: No argument given!"
+    echo "Usage: $ plugin-up \"WorldGuard-latest.jar\""
+    exit 1
+fi
+
+if  [[ $1 == http://* ]] || [[ $1 == https://* ]] ;
+then
+    temp=$(mktemp -d /tmp/plugin-wget_XXXXXX)
+    cd ${temp}
+    echo "Starting plugin download \"${1}\""
+    download "${1}"
+    mv ${temp}/* ${PLUGINDIR} &>/dev/null
+    if [[ $? != 0 ]]; then
+        echo "Error: Download appears not to be finished!"
+    fi
+    rm -rf ${temp}
+else
+    echo "Error: Not a valid download link."
+fi
