@@ -13,7 +13,7 @@ fi
 if [[ ${1} == "resources" ]]; then
 	ls -al ${RESOURCEDIR} | tail -n +4 | awk '{ print $9" "$10" "$11 }'
 elif [[ ${1} == "server" ]]; then
-	ls -al ${PLUGINDIR} | tail -n +4 | awk '{ print $9" "$10" "$11 }'
+	ls -alp ${PLUGINDIR} | grep -v '/$' | tail -n +4 | awk '{ print $9" "$10" "$11 }'
 else
 	echo "Error: only \"server\" and \"resources\" are valid arguments!"
 	exit 1
