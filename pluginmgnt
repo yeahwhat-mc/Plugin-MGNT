@@ -59,6 +59,37 @@ cmd_up(){
     ln -sf "${resourcepath}/${1}" "${pluginpath}/${1}"
     exit 0
 }
+
+cmd_down(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ ${basename} down PluginName-latest.jar"
+        exit 1
+    fi
+
+    if [ ! -L "${pluginpath}/${1}" ]; then
+        echo "Error: Couldn't find plugin symlink \"${pluginpath}/${1}\""
+        exit 1
+    fi
+
+    read -p "Are you sure to remove \"${pluginpath}/${1}\"? [Y/n]" REPLY
+
+    if [ -z "${REPLY}" ]; then
+        REPLY=Y
+    fi
+
+    case "${REPLY}" in
+        Y*|y*)
+            unlink "${pluginpath}/${1}"
+            echo "Info: plugin \"${1}\" successfully removed."
+            exit 0
+            ;;
+        N*|n*)
+            echo "Warning: Removal of \"${1}\" abborted... "    
+            exit 1
+            ;;
+    esac
+}
   
 cmd=${1}
 
