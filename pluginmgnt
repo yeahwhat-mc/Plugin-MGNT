@@ -1,0 +1,173 @@
+#!/bin/bash
+
+resourcepath="/opt/minecraft/.mc-resources/plugins"
+pluginpath="/opt/minecraft/mc-main/plugins"
+suffixformat="_latest"
+
+basename=$(basename ${0})
+  
+download(){
+    local url=${1}
+    echo -n "    "
+    wget ${resourcepath} --progress=dot ${url} 2>&1 | \
+        grep --line-buffered "%" | \
+        sed -u -e "s,\.,,g" | \
+        awk '{printf("\b\b\b\b%4s", $2)}'
+    echo -ne "\b\b\b\b"
+    echo "100% - Done"
+}
+
+cmd_usage(){
+    echo "Usage: ${basename} <command> [options]"
+    echo "Available commands:"
+    echo "    list                   List all plugins in your resource and server folder"
+    echo "    up <plugin>            Enable a plugin"
+    echo "    down <plugin>          Disable a plugin"
+    echo "    version-bump <plugin>  Bump enabled plugin version"
+    echo "    wget <downloadlink>    Download a plugin into your resource folder"
+    echo ""
+    echo "To display this usage informations run: \"$ ${basename} -h|--help\""
+    echo ""
+}
+
+cmd_list(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ ${basename} list resources|server"
+        exit 1
+    fi
+
+    if [[ ${1} == "resources" ]]; then
+        ls -al ${resourcepath} | tail -n +4 | awk '{ print $9" "$10" "$11 }'
+        exit 0
+    elif [[ ${1} == "server" ]]; then
+        ls -alp ${pluginpath} | grep -v '/$' | tail -n +4 | awk '{ print $9" "$10" "$11 }'
+        exit 0
+    else
+        echo "Error: only \"server\" and \"resources\" are valid arguments!"
+        exit 1
+    fi
+}
+
+cmd_up(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ ${basename} up PluginName-latest.jar"
+        exit 1
+    fi
+
+    if [ ! -L "${resourcepath}/${1}" ]; then
+        echo "Error: Couldn't find plugin symlink \"${resourcepath}/${1}\""
+        exit 1
+    fi
+
+    if [ -f "${pluginpath}/${1}" ]; then
+        echo "Info: \"${pluginpath}/${1}\" already exists."
+        MD51=`md5sum ${resourcepath}/${1} | awk '{ print $1 }'`
+        MD52=`md5sum ${pluginpath}/${1} | awk '{ print $1 }'`
+        if [[ "${MD51}" == "${MD52}" ]]; then
+            echo "Error: Checksum of \"${pluginpath}/${1}\" and \"${resourcepath}/${1}\" are the same. Abbort."
+            exit 1
+        fi
+    fi
+
+    ln -sf "${resourcepath}/${1}" "${pluginpath}/${1}"
+    exit 0
+}
+
+cmd_down(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ ${basename} down PluginName-latest.jar"
+        exit 1
+    fi
+
+    if [ ! -L "${pluginpath}/${1}" ]; then
+        echo "Error: Couldn't find plugin symlink \"${pluginpath}/${1}\""
+        exit 1
+    fi
+
+    read -p "Are you sure to remove \"${pluginpath}/${1}\"? [Y/n]" REPLY
+
+    if [ -z "${REPLY}" ]; then
+        REPLY=Y
+    fi
+
+    case "${REPLY}" in
+        Y*|y*)
+            unlink "${pluginpath}/${1}"
+            echo "Info: plugin \"${1}\" successfully removed."
+            exit 0
+            ;;
+        N*|n*)
+            echo "Warning: Removal of \"${1}\" abborted... "    
+            exit 1
+            ;;
+    esac
+}
+ 
+cmd_version-bump(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ ${basename} version-bump PluginName-4.9b482.jar"
+        exit 1
+    fi
+
+    if [ ! -f "${resourcepath}/${1}" ]; then
+        echo "Error: Couldn't find plugin resource \"${resourcepath}/${1}\""
+        exit 1
+    fi
+
+    pluginname="${1%_*}"
+    pluginversion="${1#*_}"
+
+    if [[ "${pluginname}" != "${1}" ]]; then
+        ln -sf "${resourcepath}/${1}" "${resourcepath}/${pluginname}${suffixformat}.jar"
+        exit 0
+    fi
+}
+
+cmd_wget(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ plugin-up \"WorldGuard-latest.jar\""
+        exit 1
+    fi
+
+    if  [[ ${1} == http://* ]] || [[ ${1} == https://* ]]; then
+        httpstatus=$(wget --spider -S "${1}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -1)
+        if [[ ${httpstatus} != "200" ]]; then
+            echo "Error: Recieved wrong HTTP status code (${httpstatus} instead of 200). Abbort!"
+            exit 1
+        fi
+
+        temp=$(mktemp -d /tmp/pluginmgnt-wget_XXXXXX)
+        cd ${temp}
+        echo "Info: Starting plugin download \"${1}\""
+        download "${1}"
+        mv ${temp}/* ${resourcepath} &>/dev/null
+        if [[ ${?} != 0 ]]; then
+            echo "Error: Download appears not to be finished!"
+        fi
+        rm -r ${temp}
+    else
+        echo "Error: Not a valid download link."
+    fi
+}
+
+cmd=${1}
+
+case ${cmd} in
+    "" | "-h" | "--help")
+        cmd_usage
+        ;;
+    *)
+        shift
+        cmd_${cmd} ${@}
+        if [ ${?} = 127 ]; then
+            echo "Error: '${cmd}' is not a known command." >&2
+            echo "    Execute \`${basename} -h|--help\` for a list of commands." >&2
+            exit 1
+        fi
+        ;;
+esac

@@ -8,11 +8,11 @@ Bash script to enable and disable Bukkit plugins including version managment and
 #### Bash script
 
     git clone git://github.com/yeahwhat-mc/Plugin-MGNT.git /usr/src/Plugin-MGNT
-    ln -s /usr/src/Plugin-MGNT/plugin-* /usr/local/bin/
+    ln -s /usr/src/Plugin-MGNT/pluginmgnt /usr/local/bin/pluginmgnt
 
 #### Autocompletion
 
-    ln -s /usr/src/Plugin-MGNT/bash_completion.d/plugin-mgnt /etc/bash_completion.d/plugin-mgnt
+    ln -s /usr/src/Plugin-MGNT/bash_completion.d/pluginmgnt /etc/bash_completion.d/pluginmgnt
 
 ## Assumptions
 
@@ -26,7 +26,7 @@ Bash script to enable and disable Bukkit plugins including version managment and
 
 ##### List plugins
 
-`$ plugin-list resources`
+`$ pluginmgnt list resources`
 
     ChestShop_3.7.8.jar
     ChestShop_latest.jar -> /opt/minecraft/.mc-resources/plugins/ChestShop_3.7.8.jar
@@ -37,7 +37,7 @@ Bash script to enable and disable Bukkit plugins including version managment and
     Vault_1.4.1.jar
     Vault_latest.jar -> /opt/minecraft/.mc-resources/plugins/Vault_1.4.1.jar
 
-`$ plugin-list server`
+`$ pluginmgnt list server`
 
     ChestShop_latest.jar -> /opt/minecraft/.mc-resources/plugins/ChestShop_3.7.8.jar
     CraftConomy_latest.jar -> /opt/minecraft/.mc-resources/plugins/CraftConomy_3.1.6.jar
@@ -47,25 +47,25 @@ Shows all plugins and symlinks in your resource and server folder.
 
 ##### Bump active plugin version
 
-`$ plugin-version-bump DisguiseCraft_1.7.8b55.jar`
+`$ pluginmgnt version-bump DisguiseCraft_1.7.8b55.jar`
 
 This will update the symlink from `/opt/minecraft/.mc-resources/plugins/DisguiseCraft_1.7.8b55.jar` to `/opt/minecraft/.mc-resources/plugins/DisguiseCraft_latest.jar` which again is linked into the plugin folder of your Minecraft servers.
 
 ##### Enable a plugin
 
-`$ plugin-up DisguiseCraft_latest.jar`
+`$ pluginmgnt up DisguiseCraft_latest.jar`
 
 First it compares MD5 checksums of the plugin in the ressource folder and the productive plugin in the Bukkit folder, if they are not the same it will symlink the "latest" version of ChestShop from `/opt/minecraft/.mc-resources/plugins/DisguiseCraft_latest.jar` to `/opt/minecraft/mc-main/plugins/DisguiseCraft_latest.jar`.
 
 ##### Disable a plugin
 
-`$ plugin-down DisguiseCraft_latest.jar`
+`$ pluginmgnt down DisguiseCraft_latest.jar`
 
 Unlinks / disables the productive plugin in the Bukkit plugin folder (`/opt/minecraft/mc-main/plugins/DisguiseCraft_latest.jar`).
 
 ##### Download a plugin
 
-`$ plugin-wget http://build.yu8.me:8080/job/DisguiseCraft/55/artifact/target/DisguiseCraft.jar^`
+`$ pluginmgnt wget http://build.yu8.me:8080/job/DisguiseCraft/55/artifact/target/DisguiseCraft.jar^`
 
 Download a plugin via HTTP or HTTPS directly into your resource folder.
 
@@ -73,7 +73,8 @@ Download a plugin via HTTP or HTTPS directly into your resource folder.
 
 - [ ] Screenshot or demo
 - [ ] Configuration file
-- [ ] `plugin-info` to get status of plugin, versions and modification dates
-- [ ] Move all sub commands into one binary
-- [X] Plugin downloader (`plugin-wget`)
+- [ ] `pluginmgnt rename` to rename plugin resources
+- [ ] `pluginmgnt info` to get status of plugin, versions and modification dates
+- [X] Move all sub commands into one binary
+- [X] Plugin downloader (`pluginmgnt wget <downloadlink>`)
 

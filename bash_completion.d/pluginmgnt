@@ -1,0 +1,37 @@
+_pluginmgnt()
+{
+    local cur prev
+
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case ${COMP_CWORD} in
+        1)
+            COMPREPLY=($(compgen -W "list up down version-bump wget" ${cur}))
+            ;;
+        2)
+            case ${prev} in
+                list)
+                    local args=$(for x in "resources" "server"; do echo ${x}; done)
+                    COMPREPLY=($(compgen -W "${args}" ${cur}))
+                    ;;
+                up)
+                    local files=$(for x in `find /opt/minecraft/.mc-resources/plugins -maxdepth 1 -type l -exec basename {} \;`; do echo ${x}; done)
+                    COMPREPLY=($(compgen -W "${files}" ${cur}))
+                    ;;
+                down)
+                    local files=$(for x in `find /opt/minecraft/mc-main/plugins -maxdepth 1 -type l -exec basename {} \;`; do echo ${x}; done)
+                    COMPREPLY=($(compgen -W "${files}" ${cur}))
+                    ;;
+                version-bump)
+                    local files=$(for x in `find /opt/minecraft/.mc-resources/plugins -maxdepth 1 -type f -exec basename {} \;`; do echo ${x}; done)
+                    COMPREPLY=($(compgen -W "${files}" ${cur}))
+                    ;;
+            esac
+            ;;
+        *)
+            COMPREPLY=()
+            ;;
+    esac
+}
+complete -F _pluginmgnt pluginmgnt
