@@ -1,0 +1,39 @@
+#!/bin/bash
+ 
+basename=$(basename ${0})
+  
+cmd_usage(){
+    echo "Usage: ${basename} <command> [options]"
+    echo "Available commands:"
+    echo "    cmd    Do this"
+    echo "    cmd2   Do that"
+    echo ""
+    echo "For help on any individual command run \"$ ${basename} -h|--help\""
+    echo ""
+}
+  
+cmd_bar(){
+    echo "Running 'bar' command."
+}
+  
+cmd_baz(){
+    echo "Running 'baz' command."
+    echo "First arg is '${1}'."
+    echo "Second arg is '${2}'."
+}
+  
+cmd=${1}
+case ${cmd} in
+    "" | "-h" | "--help")
+        cmd_usage
+        ;;
+    *)
+        shift
+        cmd_${cmd} ${@}
+        if [ ${?} = 127 ]; then
+            echo "Error: '${cmd}' is not a known command." >&2
+            echo "    Execute \`${basename} -h|--help\` for a list of commands." >&2
+            exit 1
+        fi
+        ;;
+esac
