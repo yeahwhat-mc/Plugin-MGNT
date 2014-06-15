@@ -1,28 +1,38 @@
 #!/bin/bash
+
+resourcepath="/opt/minecraft/.mc-resources/plugins"
+pluginpath="/opt/minecraft/mc-main/plugins"
  
 basename=$(basename ${0})
   
 cmd_usage(){
     echo "Usage: ${basename} <command> [options]"
     echo "Available commands:"
-    echo "    cmd    Do this"
-    echo "    cmd2   Do that"
+    echo "    list    List all plugins and symlinks in your resource and server folder"
     echo ""
     echo "For help on any individual command run \"$ ${basename} -h|--help\""
     echo ""
 }
-  
-cmd_bar(){
-    echo "Running 'bar' command."
-}
-  
-cmd_baz(){
-    echo "Running 'baz' command."
-    echo "First arg is '${1}'."
-    echo "Second arg is '${2}'."
+
+cmd_list(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ ${basename} list resources|server"
+        exit 1
+    fi
+
+    if [[ ${1} == "resources" ]]; then
+        ls -al ${resourcepath} | tail -n +4 | awk '{ print $9" "$10" "$11 }'
+    elif [[ ${1} == "server" ]]; then
+        ls -alp ${pluginpath} | grep -v '/$' | tail -n +4 | awk '{ print $9" "$10" "$11 }'
+    else
+        echo "Error: only \"server\" and \"resources\" are valid arguments!"
+        exit 1
+    fi
 }
   
 cmd=${1}
+
 case ${cmd} in
     "" | "-h" | "--help")
         cmd_usage
