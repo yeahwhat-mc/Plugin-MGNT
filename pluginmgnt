@@ -36,7 +36,6 @@ cmd_list(){
 
 cmd_up(){
     if [ "${#}" -ne 1 ]; then
-    then
         echo "Error: No argument given!"
         echo "Usage: $ ${basename} up PluginName-latest.jar"
         exit 1
