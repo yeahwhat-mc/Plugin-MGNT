@@ -2,15 +2,17 @@
 
 resourcepath="/opt/minecraft/.mc-resources/plugins"
 pluginpath="/opt/minecraft/mc-main/plugins"
- 
+suffixformat="_latest"
+
 basename=$(basename ${0})
   
 cmd_usage(){
     echo "Usage: ${basename} <command> [options]"
     echo "Available commands:"
-    echo "    list    List all plugins and symlinks in your resource and server folder"
-    echo "    up      Enable a plugin"
-    echo "    down    Disable a plugin"
+    echo "    list          List all plugins in your resource and server folder"
+    echo "    up            Enable a plugin"
+    echo "    down          Disable a plugin"
+    echo "    version-bump  Bump enabled plugin version"
     echo ""
     echo "To display this usage information run \"$ ${basename} -h|--help\""
     echo ""
@@ -91,7 +93,28 @@ cmd_down(){
             ;;
     esac
 }
-  
+ 
+cmd_version-bump(){
+    if [ "$#" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ ${basename} version-bump PluginName-4.9b482.jar"
+        exit 1
+    fi
+
+    if [ ! -f "${resourcepath}/${1}" ]; then
+        echo "Error: Couldn't find plugin resource \"${resourcepath}/${1}\""
+        exit 1
+    fi
+
+    pluginname="${1%_*}"
+    pluginversion="${1#*_}"
+
+    if [[ "${pluginname}" != "${1}" ]]; then
+        ln -sf "${resourcepath}/${1}" "${resourcepath}/${pluginname}${suffixformat}.jar"
+        exit 0
+    fi
+}
+
 cmd=${1}
 
 case ${cmd} in
