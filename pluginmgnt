@@ -10,8 +10,9 @@ cmd_usage(){
     echo "Available commands:"
     echo "    list    List all plugins and symlinks in your resource and server folder"
     echo "    up      Enable a plugin"
+    echo "    down    Disable a plugin"
     echo ""
-    echo "For help on any individual command run \"$ ${basename} -h|--help\""
+    echo "To display this usage information run \"$ ${basename} -h|--help\""
     echo ""
 }
 
