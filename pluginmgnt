@@ -6,6 +6,17 @@ suffixformat="_latest"
 
 basename=$(basename ${0})
   
+download(){
+    local url=${1}
+    echo -n "    "
+    wget ${resourcepath} --progress=dot ${url} 2>&1 | \
+        grep --line-buffered "%" | \
+        sed -u -e "s,\.,,g" | \
+        awk '{printf("\b\b\b\b%4s", $2)}'
+    echo -ne "\b\b\b\b"
+    echo "100% - Done"
+}
+
 cmd_usage(){
     echo "Usage: ${basename} <command> [options]"
     echo "Available commands:"
@@ -95,7 +106,7 @@ cmd_down(){
 }
  
 cmd_version-bump(){
-    if [ "$#" -ne 1 ]; then
+    if [ "${#}" -ne 1 ]; then
         echo "Error: No argument given!"
         echo "Usage: $ ${basename} version-bump PluginName-4.9b482.jar"
         exit 1
@@ -112,6 +123,34 @@ cmd_version-bump(){
     if [[ "${pluginname}" != "${1}" ]]; then
         ln -sf "${resourcepath}/${1}" "${resourcepath}/${pluginname}${suffixformat}.jar"
         exit 0
+    fi
+}
+
+cmd_wget(){
+    if [ "${#}" -ne 1 ]; then
+        echo "Error: No argument given!"
+        echo "Usage: $ plugin-up \"WorldGuard-latest.jar\""
+        exit 1
+    fi
+
+    if  [[ ${1} == http://* ]] || [[ ${1} == https://* ]]; then
+        httpstatus=$(wget --spider -S "${1}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -1)
+        if [[ ${httpstatus} != "200" ]]; then
+            echo "Error: Recieved wrong HTTP status code (${httpstatus} instead of 200). Abbort!"
+            exit 1
+        fi
+
+        temp=$(mktemp -d /tmp/pluginmgnt-wget_XXXXXX)
+        cd ${temp}
+        echo "Info: Starting plugin download \"${1}\""
+        download "${1}"
+        mv ${temp}/* ${resourcepath} &>/dev/null
+        if [[ ${?} != 0 ]]; then
+            echo "Error: Download appears not to be finished!"
+        fi
+        rm -r ${temp}
+    else
+        echo "Error: Not a valid download link."
     fi
 }
 
