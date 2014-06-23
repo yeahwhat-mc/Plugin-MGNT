@@ -128,9 +128,10 @@ cmd_version-bump(){
 }
 
 cmd_wget(){
-    if [ "${#}" -ne 1 ]; then
+    if [[ "${#}" < 1 && "${#}" > 2 ]]; then
         echo "Error: No argument given!"
-        echo "Usage: $ plugin-up \"WorldGuard-latest.jar\""
+        echo "Usage: $ plugin-wget \"http://h.cnaude.org:8081/job/PurpleIRC/lastSuccessfulBuild/artifact/target/PurpleIRC.jar\""
+        echo "       $ plugin-wget \"http://h.cnaude.org:8081/job/PurpleIRC/lastSuccessfulBuild/artifact/target/PurpleIRC.jar\" \"PurpleIRC_2.1.14b120.jar\""
         exit 1
     fi
 
@@ -145,13 +146,31 @@ cmd_wget(){
         cd ${temp}
         echo "Info: Starting plugin download \"${1}\""
         download "${1}"
-        mv ${temp}/* ${resourcepath} &>/dev/null
+        
+        if [ "${#}" -eq 2 ]; then
+            newpluginname="${2%_*}"
+            
+            if [[ "${newpluginname}" != "${2}" ]]; then
+                mv ${temp}/* ${resourcepath}/${2} &>/dev/null
+                exit 0
+            else
+                echo "Error: New plugin name is not in a valid format (PluginName_1.0b123.jar)!"
+                exit 1
+            fi
+        else
+            mv ${temp}/* ${resourcepath} &>/dev/null
+        fi
+
         if [[ ${?} != 0 ]]; then
             echo "Error: Download appears not to be finished!"
+            exit 1
         fi
+
         rm -r ${temp}
+        exit 0
     else
         echo "Error: Not a valid download link."
+        exit 1
     fi
 }
 
