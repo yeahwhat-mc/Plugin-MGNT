@@ -136,7 +136,7 @@ cmd_wget(){
     fi
 
     if  [[ ${1} == http://* ]] || [[ ${1} == https://* ]]; then
-        httpstatus=$(wget --spider -S "${1}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -1)
+        httpstatus=$(wget -S "${1}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -1)
         if [[ ${httpstatus} != "200" ]]; then
             echo "Error: Recieved wrong HTTP status code (${httpstatus} instead of 200). Abbort!"
             exit 1
