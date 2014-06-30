@@ -23,7 +23,7 @@ cmd_usage(){
     echo "    list                   List all plugins in your resource and server folder"
     echo "    up <plugin>            Enable a plugin"
     echo "    down <plugin>          Disable a plugin"
-    echo "    version-bump <plugin>  Bump enabled plugin version"
+    echo "    bump <plugin>          Bump enabled plugin version"
     echo "    get <downloadlink>     Download a plugin into your resource folder"
     echo ""
     echo "To display this usage informations run: \"$ ${basename} -h|--help\""
@@ -106,10 +106,10 @@ cmd_down(){
     esac
 }
  
-cmd_version-bump(){
+cmd_bump(){
     if [ "${#}" -ne 1 ]; then
         echo "Error: No argument given!"
-        echo "Usage: $ ${basename} version-bump PluginName-4.9b482.jar"
+        echo "Usage: $ ${basename} bump PluginName-4.9b482.jar"
         exit 1
     fi
 

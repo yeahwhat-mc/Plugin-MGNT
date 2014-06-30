@@ -7,7 +7,7 @@ _pluginmgnt()
 
     case ${COMP_CWORD} in
         1)
-            COMPREPLY=($(compgen -W "list up down version-bump wget" ${cur}))
+            COMPREPLY=($(compgen -W "list up down bump get" ${cur}))
             ;;
         2)
             case ${prev} in
@@ -23,7 +23,7 @@ _pluginmgnt()
                     local files=$(for x in `find /opt/minecraft/mc-main/plugins -maxdepth 1 -type l -exec basename {} \;`; do echo ${x}; done)
                     COMPREPLY=($(compgen -W "${files}" ${cur}))
                     ;;
-                version-bump)
+                bump)
                     local files=$(for x in `find /opt/minecraft/.mc-resources/plugins -maxdepth 1 -type f -exec basename {} \;`; do echo ${x}; done)
                     COMPREPLY=($(compgen -W "${files}" ${cur}))
                     ;;
