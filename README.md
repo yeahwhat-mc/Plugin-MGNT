@@ -47,7 +47,7 @@ Shows all plugins and symlinks in your resource and server folder.
 
 ##### Bump active plugin version
 
-`$ pluginmgnt version-bump DisguiseCraft_1.7.8b55.jar`
+`$ pluginmgnt bump DisguiseCraft_1.7.8b55.jar`
 
 This will update the symlink from `/opt/minecraft/.mc-resources/plugins/DisguiseCraft_1.7.8b55.jar` to `/opt/minecraft/.mc-resources/plugins/DisguiseCraft_latest.jar` which again is linked into the plugin folder of your Minecraft servers.
 
@@ -65,7 +65,7 @@ Unlinks / disables the productive plugin in the Bukkit plugin folder (`/opt/mine
 
 ##### Download a plugin
 
-`$ pluginmgnt wget http://build.yu8.me:8080/job/DisguiseCraft/55/artifact/target/DisguiseCraft.jar^`
+`$ pluginmgnt get http://build.yu8.me:8080/job/DisguiseCraft/55/artifact/target/DisguiseCraft.jar^`
 
 Download a plugin via HTTP or HTTPS directly into your resource folder.
 
