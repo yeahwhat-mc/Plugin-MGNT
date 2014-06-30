@@ -24,7 +24,7 @@ cmd_usage(){
     echo "    up <plugin>            Enable a plugin"
     echo "    down <plugin>          Disable a plugin"
     echo "    version-bump <plugin>  Bump enabled plugin version"
-    echo "    wget <downloadlink>    Download a plugin into your resource folder"
+    echo "    get <downloadlink>     Download a plugin into your resource folder"
     echo ""
     echo "To display this usage informations run: \"$ ${basename} -h|--help\""
     echo ""
@@ -127,11 +127,11 @@ cmd_version-bump(){
     fi
 }
 
-cmd_wget(){
+cmd_get(){
     if [[ "${#}" < 1 && "${#}" > 2 ]]; then
         echo "Error: No argument given!"
-        echo "Usage: $ plugin-wget \"http://h.cnaude.org:8081/job/PurpleIRC/lastSuccessfulBuild/artifact/target/PurpleIRC.jar\""
-        echo "       $ plugin-wget \"http://h.cnaude.org:8081/job/PurpleIRC/lastSuccessfulBuild/artifact/target/PurpleIRC.jar\" \"PurpleIRC_2.1.14b120.jar\""
+        echo "Usage: $ ${basename} get \"http://h.cnaude.org:8081/job/PurpleIRC/lastSuccessfulBuild/artifact/target/PurpleIRC.jar\""
+        echo "       $ ${basename} get \"http://h.cnaude.org:8081/job/PurpleIRC/lastSuccessfulBuild/artifact/target/PurpleIRC.jar\" \"PurpleIRC_2.1.14b120.jar\""
         exit 1
     fi
 
