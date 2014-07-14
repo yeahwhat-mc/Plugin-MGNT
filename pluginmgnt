@@ -182,7 +182,7 @@ case ${cmd} in
         ;;
     *)
         shift
-        cmd_${cmd} ${@}
+        cmd_${cmd} ${@} 2>/dev/null
         if [ ${?} = 127 ]; then
             echo "Error: '${cmd}' is not a known command." >&2
             echo "    Execute \`${basename} -h|--help\` for a list of commands." >&2
